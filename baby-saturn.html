@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BABY SATURN — Orbit Young. Stay Curious.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f0ece4;
+    --gray: #1a1a1a;
+    --gray2: #2a2a2a;
+    --accent: #d4c5a9;
+    --dim: #888880;
+    --rust: #c4752a;
+    --rust-dim: #7a4a1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.5;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor-dot {
+    width: 6px; height: 6px;
+    background: var(--white);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s;
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(240,236,228,0.4);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease, width 0.3s, height 0.3s, border-color 0.3s;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--dim);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 40px 80px;
+  }
+
+  .hero-orbit {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(240,236,228,0.06);
+    animation: orbit-spin linear infinite;
+  }
+
+  .orbit-ring:nth-child(1) { width: 300px; height: 300px; animation-duration: 20s; }
+  .orbit-ring:nth-child(2) { width: 500px; height: 500px; animation-duration: 35s; animation-direction: reverse; }
+  .orbit-ring:nth-child(3) { width: 700px; height: 700px; animation-duration: 50s; }
+  .orbit-ring:nth-child(4) { width: 900px; height: 900px; animation-duration: 70s; animation-direction: reverse; }
+
+  .orbit-dot {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    top: -2px;
+    left: calc(50% - 2px);
+    opacity: 0.6;
+  }
+
+  @keyframes orbit-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fade-up 1s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 16vw, 200px);
+    line-height: 0.85;
+    letter-spacing: -2px;
+    color: var(--white);
+    opacity: 0;
+    animation: fade-up 1s 0.4s forwards;
+    position: relative;
+  }
+
+  .hero-title .outline {
+    -webkit-text-stroke: 1px rgba(240,236,228,0.3);
+    color: transparent;
+    display: block;
+  }
+
+  .hero-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(120px, 25vw, 320px);
+    line-height: 0.8;
+    color: rgba(240,236,228,0.04);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+    letter-spacing: -8px;
+  }
+
+  .hero-tagline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-top: 32px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fade-up 1s 0.6s forwards;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fade-up 1s 1.2s forwards;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--dim));
+    animation: scroll-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-pulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  .scroll-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--dim);
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION BASE */
+  section { padding: 120px 40px; }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray2);
+  }
+
+  /* LORE SECTION */
+  .lore-section {
+    background: var(--gray);
+    border-top: 1px solid var(--gray2);
+    border-bottom: 1px solid var(--gray2);
+  }
+
+  .lore-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .lore-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 6vw, 80px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+  }
+
+  .lore-body {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--accent);
+    font-weight: 300;
+    letter-spacing: 0.3px;
+  }
+
+  .lore-body p + p { margin-top: 20px; }
+
+  .lore-stat {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    margin-top: 48px;
+    border: 1px solid var(--gray2);
+  }
+
+  .stat-box {
+    padding: 24px;
+    background: var(--black);
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 2px;
+    color: var(--white);
+    display: block;
+  }
+
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* DESIGN ELEMENTS */
+  .designs-section { max-width: 1400px; margin: 0 auto; }
+
+  .design-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 0;
+  }
+
+  .design-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 3/4;
+    background: var(--gray);
+  }
+
+  .design-card.large {
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+
+  .design-card-inner {
+    position: absolute;
+    inset: 0;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .design-card:hover .design-card-inner {
+    transform: translateY(-8px);
+  }
+
+  .design-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 180px;
+    color: rgba(240,236,228,0.04);
+    letter-spacing: -8px;
+    pointer-events: none;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s;
+  }
+
+  .design-card:hover .design-bg {
+    transform: scale(1.05);
+    color: rgba(240,236,228,0.07);
+  }
+
+  .design-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 60%);
+  }
+
+  .design-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .design-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: var(--white);
+    line-height: 0.95;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 8px;
+  }
+
+  .design-desc {
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s;
+    opacity: 0;
+  }
+
+  .design-card:hover .design-desc {
+    max-height: 100px;
+    opacity: 1;
+  }
+
+  .design-line {
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 2;
+    transition: width 0.4s;
+  }
+
+  .design-card:hover .design-line { width: 64px; }
+
+  /* LORE CARDS — timeline */
+  .timeline-section {
+    background: var(--black);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 64px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.8s, transform 0.8s;
+  }
+
+  .timeline-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -44px;
+    top: 6px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px rgba(212,197,169,0.4);
+  }
+
+  .timeline-year {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--rust);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .timeline-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .timeline-text {
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--accent);
+    font-weight: 300;
+    max-width: 600px;
+  }
+
+  /* CONNECTIONS MAP */
+  .connections-section {
+    background: var(--gray);
+    border-top: 1px solid var(--gray2);
+    border-bottom: 1px solid var(--gray2);
+  }
+
+  .connections-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .connection-node {
+    padding: 40px 32px;
+    background: var(--black);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .connection-node:hover { background: var(--gray2); }
+
+  .node-index {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: rgba(240,236,228,0.06);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .node-icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--gray2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    transition: border-color 0.3s;
+  }
+
+  .connection-node:hover .node-icon { border-color: var(--accent); }
+
+  .node-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .node-text {
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.7;
+  }
+
+  .node-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: gap 0.3s;
+  }
+
+  .node-link:hover { gap: 16px; }
+
+  /* MANIFESTO */
+  .manifesto-section {
+    text-align: center;
+    padding: 160px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .manifesto-bg-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 12vw, 140px);
+    color: rgba(240,236,228,0.02);
+    letter-spacing: -4px;
+    pointer-events: none;
+    line-height: 0.8;
+  }
+
+  .manifesto-quote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 8vw, 96px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .manifesto-quote em {
+    font-style: normal;
+    -webkit-text-stroke: 1px rgba(240,236,228,0.4);
+    color: transparent;
+  }
+
+  .manifesto-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--dim);
+    margin-top: 48px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* GALLERY STRIP */
+  .gallery-strip {
+    display: flex;
+    gap: 2px;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .strip-item {
+    flex: 0 0 33.33%;
+    aspect-ratio: 4/3;
+    background: var(--gray);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .strip-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--dim);
+    background: linear-gradient(transparent, rgba(10,10,10,0.8));
+    text-transform: uppercase;
+  }
+
+  /* SVG placeholders for shirt graphics */
+  .shirt-visual {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--gray2);
+    padding: 60px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 4px;
+    color: rgba(240,236,228,0.1);
+    line-height: 1;
+  }
+
+  .footer-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--dim);
+    line-height: 2;
+  }
+
+  /* HOVER CARD EFFECT */
+  .tilt-card {
+    transition: transform 0.3s ease;
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    border-top: 1px solid var(--gray2);
+    border-bottom: 1px solid var(--gray2);
+    padding: 20px 0;
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--dim);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .marquee-item::after {
+    content: '✦';
+    font-size: 10px;
+    color: var(--rust);
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* GLITCH TEXT EFFECT */
+  .glitch {
+    position: relative;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .glitch::before {
+    color: rgba(196,117,42,0.6);
+    clip: rect(0, 900px, 0, 0);
+    animation: glitch-1 3s infinite linear;
+  }
+
+  .glitch::after {
+    color: rgba(212,197,169,0.4);
+    clip: rect(0, 900px, 0, 0);
+    animation: glitch-2 3s infinite linear;
+  }
+
+  @keyframes glitch-1 {
+    0%, 94%, 100% { clip: rect(0, 0, 0, 0); transform: skewX(0); }
+    95% { clip: rect(10px, 9999px, 40px, 0); transform: skewX(-2deg); }
+    96% { clip: rect(60px, 9999px, 80px, 0); transform: skewX(2deg); }
+    97% { clip: rect(20px, 9999px, 60px, 0); transform: skewX(-1deg); }
+  }
+
+  @keyframes glitch-2 {
+    0%, 91%, 100% { clip: rect(0, 0, 0, 0); transform: skewX(0); }
+    92% { clip: rect(40px, 9999px, 80px, 0); transform: skewX(2deg); }
+    93% { clip: rect(0, 9999px, 30px, 0); transform: skewX(-2deg); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 20px; }
+    .nav-links { display: none; }
+    section { padding: 80px 20px; }
+    .lore-grid { grid-template-columns: 1fr; gap: 40px; }
+    .design-cards { grid-template-columns: 1fr 1fr; }
+    .design-card.large { grid-row: span 1; }
+    .connections-grid { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 24px; align-items: flex-start; }
+    .strip-item { flex: 0 0 80%; }
+  }
+
+  @media (max-width: 600px) {
+    .design-cards { grid-template-columns: 1fr; }
+    .connections-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="dot"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">BABY SATURN</a>
+  <ul class="nav-links">
+    <li><a href="#lore">LORE</a></li>
+    <li><a href="#designs">DESIGNS</a></li>
+    <li><a href="#timeline">TIMELINE</a></li>
+    <li><a href="#connections">CONNECTIONS</a></li>
+    <li><a href="#manifesto">MANIFESTO</a></li>
+  </ul>
+  <span class="nav-tag">EST. 66</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orbit">
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+  </div>
+  <div class="hero-number">66</div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Orbit Young · Stay Curious · Est. #66</p>
+    <h1 class="hero-title glitch" data-text="BABY SATURN">
+      BABY<br>
+      <span class="outline">SATURN</span>
+    </h1>
+    <p class="hero-tagline">Born from the rings · Raised in the streets</p>
+  </div>
+  <div class="hero-scroll">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">BABY SATURN</span>
+    <span class="marquee-item">ORBIT YOUNG</span>
+    <span class="marquee-item">STAY CURIOUS</span>
+    <span class="marquee-item">SEE IT FIRST</span>
+    <span class="marquee-item">OWN THE MOMENT</span>
+    <span class="marquee-item">NUMBER 66</span>
+    <span class="marquee-item">BABY SATURN</span>
+    <span class="marquee-item">ORBIT YOUNG</span>
+    <span class="marquee-item">STAY CURIOUS</span>
+    <span class="marquee-item">SEE IT FIRST</span>
+    <span class="marquee-item">OWN THE MOMENT</span>
+    <span class="marquee-item">NUMBER 66</span>
+  </div>
+</div>
+
+<!-- LORE SECTION -->
+<section class="lore-section" id="lore">
+  <div class="lore-grid">
+    <div>
+      <div class="section-label">01 · กำเนิดแบรนด์</div>
+      <h2 class="lore-heading">THE<br>ORIGIN<br>STORY</h2>
+      <div class="lore-stat">
+        <div class="stat-box">
+          <span class="stat-num">66</span>
+          <span class="stat-label">ตัวเลขโชคชัย</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">∞</span>
+          <span class="stat-label">วงโคจรชีวิต</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">62</span>
+          <span class="stat-label">ดาวบริวารของเสาร์</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">BKK</span>
+          <span class="stat-label">จุดกำเนิด</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="lore-body">
+        <p>Baby Saturn ถือกำเนิดจากไอเดียเดียวกับที่ดาวเสาร์กำเนิดขึ้น — ความโกลาหล ฝุ่นจักรวาล และพลังงานดิบที่ค่อยๆ หลอมรวมกันจนกลายเป็นบางอย่างที่งดงาม วงแหวนของดาวเสาร์ไม่ได้เกิดมาพร้อมกับมัน มันถูกสร้างขึ้นจากชิ้นส่วนเล็กๆ นับล้านชิ้น</p>
+        <p>แบรนด์นี้เชื่อว่าสไตล์คือวงโคจรของตัวตน ไม่มีใครหมุนในเส้นทางเดียวกัน ทุกคนมีแรงโน้มถ่วงของตัวเอง เสื้อแต่ละตัวคือบันทึกของช่วงเวลา — ไม่ใช่แค่เสื้อ แต่คือพิกัดในกาลอวกาศ</p>
+        <p>ชื่อ "Baby Saturn" หมายถึงการเป็นดาวที่ยังเล็กอยู่ ยังอยู่ในระหว่างการสร้างตัวเอง ยังมีพื้นที่ให้เติบโต — และนั่นคือสิ่งที่วัยรุ่นทุกคนเป็นอยู่</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN BREAKDOWN -->
+<section style="padding: 120px 0; background: var(--black);" id="designs">
+  <div class="designs-section">
+    <div style="padding: 0 40px;">
+      <div class="section-label">02 · ประวัติลาย</div>
+      <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); margin-bottom: 60px; line-height: 0.9; letter-spacing: 2px;">DESIGN<br>ELEMENTS</h2>
+    </div>
+    <div class="design-cards" style="padding: 0 2px;">
+
+      <!-- Card 1 — Saturn Ring -->
+      <div class="design-card large tilt-card" style="background: #111; min-height: 600px;">
+        <div class="design-bg" style="font-size: 240px; line-height: 1;">○</div>
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none;">
+          <svg width="280" height="200" viewBox="0 0 280 200">
+            <ellipse cx="140" cy="100" rx="60" ry="60" fill="none" stroke="rgba(240,236,228,0.15)" stroke-width="1"/>
+            <ellipse cx="140" cy="100" rx="130" ry="55" fill="none" stroke="rgba(240,236,228,0.25)" stroke-width="16" stroke-dasharray="none" transform="rotate(-10 140 100)"/>
+            <ellipse cx="140" cy="100" rx="60" ry="60" fill="rgba(10,10,10,0.6)"/>
+            <text x="140" y="106" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="24" fill="rgba(240,236,228,0.8)" letter-spacing="2">SATURN</text>
+          </svg>
+        </div>
+        <div class="design-overlay"></div>
+        <div class="design-card-inner">
+          <div class="design-tag">Element 01 · Front Graphic</div>
+          <div class="design-line"></div>
+          <div class="design-name">วงแหวนพลังงาน<br>THE RING MARK</div>
+          <div class="design-desc">วงแหวนแบบ Enso stroke ที่ดูดิบและมีพลัง ตีความวงแหวนดาวเสาร์ผ่านการแปรงหมึก ไม่สมบูรณ์แบบโดยเจตนา — เพราะความไม่สมบูรณ์คือที่ที่ชีวิตแท้จริงอยู่</div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Typography -->
+      <div class="design-card tilt-card" style="background: #0d0d0d;">
+        <div class="design-bg">BS</div>
+        <div class="design-overlay"></div>
+        <div class="design-card-inner">
+          <div class="design-tag">Element 02 · Typography</div>
+          <div class="design-line"></div>
+          <div class="design-name">BABY SATURN<br>WORDMARK</div>
+          <div class="design-desc">ตัวอักษรแบบ Varsity bold ผสมกับ condensed sans ให้ความรู้สึก sport-era ของทศวรรษที่ 60-70 ตัดกับเสื้อสีหินธรรมชาติ</div>
+        </div>
+      </div>
+
+      <!-- Card 3 — Number 66 -->
+      <div class="design-card tilt-card" style="background: #111;">
+        <div class="design-bg" style="font-size: 200px;">66</div>
+        <div class="design-overlay"></div>
+        <div class="design-card-inner">
+          <div class="design-tag">Element 03 · Back Number</div>
+          <div class="design-line"></div>
+          <div class="design-name">NUMBER<br>SIXTY-SIX</div>
+          <div class="design-desc">เลข 66 ในวัฒนธรรมจีนหมายถึงความราบรื่น ความต่อเนื่อง ชีวิตที่ไหลลื่น — ใส่ไว้หลังเสื้อเพื่อให้พลังงานนั้นติดตัวคุณไปทุกที่</div>
+        </div>
+      </div>
+
+      <!-- Card 4 — Planet Icon -->
+      <div class="design-card tilt-card" style="background: #0e0e0e;">
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.15; pointer-events: none;">
+          <svg width="120" height="80" viewBox="0 0 120 80">
+            <ellipse cx="60" cy="40" rx="25" ry="25" fill="none" stroke="white" stroke-width="2"/>
+            <ellipse cx="60" cy="40" rx="55" ry="22" fill="none" stroke="white" stroke-width="2" transform="rotate(-15 60 40)"/>
+            <circle cx="80" cy="25" r="4" fill="white"/>
+            <circle cx="40" cy="52" r="3" fill="white"/>
+          </svg>
+        </div>
+        <div class="design-overlay"></div>
+        <div class="design-card-inner">
+          <div class="design-tag">Element 04 · Planet Icon</div>
+          <div class="design-line"></div>
+          <div class="design-name">BABY<br>SATURN ICON</div>
+          <div class="design-desc">ไอคอนดาวเสาร์น้อยบนส่วนคอเสื้อด้านหลัง — เหมือนตราประทับลับที่รู้กันในหมู่คนที่รู้</div>
+        </div>
+      </div>
+
+      <!-- Card 5 — Distress Texture -->
+      <div class="design-card tilt-card" style="background: #0c0c0c;">
+        <div class="design-bg" style="font-size: 14px; letter-spacing: 1px; color: rgba(240,236,228,0.04); text-align: center; padding: 20px; line-height: 1.4; font-family: monospace; font-size: 11px; width: 100%;">
+          ░░▒▒▓▓██▓▓▒▒░░░░▒▒▓▓██<br>
+          ░░░░▒▒▓▓████▓▓▒▒░░░░▒▒<br>
+          ▒▒░░░░▒▒▓▓██████▓▓▒▒░░<br>
+          ▓▓▒▒░░░░▒▒▓▓████▓▓▒▒░░<br>
+          ██▓▓▒▒░░░░▒▒▓▓██▓▓▒▒░░<br>
+          ▓▓██▓▓▒▒░░░░▒▒▓▓▒▒░░░░
+        </div>
+        <div class="design-overlay"></div>
+        <div class="design-card-inner">
+          <div class="design-tag">Element 05 · Texture</div>
+          <div class="design-line"></div>
+          <div class="design-name">MINERAL<br>WASH EFFECT</div>
+          <div class="design-desc">กระบวนการ acid-wash พิเศษที่ทำให้เสื้อดูเหมือนผ่านเวลามายาวนาน เหมือนเจอในตู้เสื้อผ้าของคนเก่าที่เท่มาก</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline" style="background: var(--black); padding: 120px 40px;">
+  <div class="timeline-section">
+    <div class="section-label">03 · ประวัติศาสตร์ลาย</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 0;">
+      <div>
+        <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 64px); line-height: 0.9; letter-spacing: 2px; margin-bottom: 60px;">THE<br>LORE<br>BEHIND<br>THE INK</h2>
+      </div>
+      <div class="timeline">
+
+        <div class="timeline-item" data-delay="0">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">Chapter I · The Ring</div>
+          <div class="timeline-title">วงแหวนแห่งเจตนา</div>
+          <div class="timeline-text">วงแหวนดาวเสาร์ใช้เวลาหลายล้านปีก่อเกิด ลายวงแหวนบนเสื้อได้แรงบันดาลใจมาจากการแปรงหมึกแบบ Zen Enso — ไม่ปิดวงสมบูรณ์ เพราะชีวิตมนุษย์ก็ไม่มีวันสมบูรณ์ ช่องว่างนั้นคือที่ที่ความเป็นไปได้อยู่</div>
+        </div>
+
+        <div class="timeline-item" data-delay="150">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">Chapter II · The Name</div>
+          <div class="timeline-title">ทำไมถึงเป็น "Baby"</div>
+          <div class="timeline-text">Baby ไม่ได้แปลว่าเล็ก — มันแปลว่าอยู่ในระหว่างการเกิด ดาวเสาร์เองก็ยังขยายวงแหวนอยู่ตลอดเวลา เราทุกคนเป็น Baby Saturn — ยังก่อร่าง ยังสร้างตัวเอง ยังไม่หยุดโตขึ้น</div>
+        </div>
+
+        <div class="timeline-item" data-delay="300">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">Chapter III · The Number</div>
+          <div class="timeline-title">ความลับของเลข 66</div>
+          <div class="timeline-text">66 ในวัฒนธรรมจีนคือตัวเลขแห่งความลื่นไหล เหมือนน้ำที่ไหลผ่านทุกอุปสรรค ดาวเสาร์มี 62 ดวงจันทร์ที่รู้จัก บวกกับ 4 ที่รอการค้นพบ — รวมกันคือ 66 ชีวิตที่โคจรรอบสิ่งที่คุณรัก</div>
+        </div>
+
+        <div class="timeline-item" data-delay="450">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">Chapter IV · The Wash</div>
+          <div class="timeline-title">เสื้อที่มีความทรงจำ</div>
+          <div class="timeline-text">กระบวนการ mineral wash สร้างลายเอกลักษณ์บนเนื้อผ้าที่ไม่มีชิ้นไหนเหมือนกัน เหมือนรอยพับบนแผนที่ดาว ที่บันทึกทิศทางของการเดินทาง เสื้อของคุณคือชิ้นเดียวในจักรวาล</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONNECTIONS -->
+<section class="connections-section" id="connections">
+  <div style="padding: 0 40px 60px;">
+    <div class="section-label">04 · จุดเชื่อมโยง</div>
+    <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 64px); line-height: 0.9; letter-spacing: 2px;">CONNECTED<br>UNIVERSE</h2>
+  </div>
+  <div class="connections-grid">
+    <div class="connection-node">
+      <div class="node-index">01</div>
+      <div class="node-icon">◎</div>
+      <div class="node-title">Space × Street</div>
+      <div class="node-text">ดาราศาสตร์พบกับวัฒนธรรมสตรีท วงแหวนที่ลอยสูงสุดในระบบสุริยะ ถูกพาลงมาสู่ถนนในกรุงเทพฯ</div>
+      <a href="#designs" class="node-link">ดูลายเสื้อ →</a>
+    </div>
+    <div class="connection-node">
+      <div class="node-index">02</div>
+      <div class="node-icon">⌘</div>
+      <div class="node-title">Sport × Cosmos</div>
+      <div class="node-text">ตัวเลขหลัง jersey จากกีฬา บวกกับพิกัดจักรวาล สองโลกที่ดูเหมือนห่างไกลแต่แชร์ผลของทีมเดียวกัน</div>
+      <a href="#timeline" class="node-link">อ่านเรื่องราว →</a>
+    </div>
+    <div class="connection-node">
+      <div class="node-index">03</div>
+      <div class="node-icon">禅</div>
+      <div class="node-title">Zen × Youth</div>
+      <div class="node-text">วงกลม Enso จากปรัชญา Zen Buddhism แปลงร่างเป็นพลังงานของเยาวชน ช่องว่างในวงกลมคือพื้นที่ของความเป็นไปได้</div>
+      <a href="#manifesto" class="node-link">ดูปรัชญา →</a>
+    </div>
+    <div class="connection-node">
+      <div class="node-index">04</div>
+      <div class="node-icon">數</div>
+      <div class="node-title">Number × Culture</div>
+      <div class="node-text">เลข 66 จากวัฒนธรรมจีนที่ฝังรากในย่าน Chinatown ของกรุงเทพฯ — แบรนด์ที่เกิดในเมืองและพกวัฒนธรรมนั้นไว้บนเนื้อผ้า</div>
+      <a href="#lore" class="node-link">อ่าน lore →</a>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto-section" id="manifesto">
+  <div class="manifesto-bg-text">
+    ORBIT<br>YOUNG<br>STAY
+  </div>
+  <div class="manifesto-quote">
+    ไม่มีใคร<br>
+    <em>ORBIT</em><br>
+    เส้นทางเดิม
+  </div>
+  <p class="manifesto-sub">Baby Saturn · BKK · Orbit Young, Stay Curious · Est. #66</p>
+</section>
+
+<!-- GALLERY STRIP -->
+<div class="gallery-strip">
+  <div class="strip-item">
+    <div class="shirt-visual" style="background: #111;">
+      <svg width="200" height="240" viewBox="0 0 200 240" style="opacity: 0.7;">
+        <path d="M60 40 L20 70 L40 90 L40 200 L160 200 L160 90 L180 70 L140 40 L120 55 Q100 65 80 55 Z" fill="none" stroke="rgba(240,236,228,0.3)" stroke-width="1.5"/>
+        <ellipse cx="100" cy="120" rx="52" ry="52" fill="none" stroke="rgba(240,236,228,0.5)" stroke-width="10" transform="rotate(-10 100 120)"/>
+        <ellipse cx="100" cy="120" rx="24" ry="24" fill="none" stroke="rgba(240,236,228,0.3)" stroke-width="1"/>
+        <text x="100" y="114" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="13" fill="rgba(240,236,228,0.8)" letter-spacing="1">BABY</text>
+        <text x="100" y="130" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="13" fill="rgba(240,236,228,0.8)" letter-spacing="1">SATURN</text>
+      </svg>
+    </div>
+    <div class="strip-label">Front · Ring Graphic</div>
+  </div>
+  <div class="strip-item">
+    <div class="shirt-visual" style="background: #0e0e0e;">
+      <svg width="200" height="240" viewBox="0 0 200 240" style="opacity: 0.7;">
+        <path d="M60 40 L20 70 L40 90 L40 200 L160 200 L160 90 L180 70 L140 40 L120 55 Q100 65 80 55 Z" fill="none" stroke="rgba(240,236,228,0.3)" stroke-width="1.5"/>
+        <text x="100" y="75" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="10" fill="rgba(240,236,228,0.5)" letter-spacing="3">BABY SATURN</text>
+        <text x="100" y="160" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="72" fill="rgba(240,236,228,0.5)" letter-spacing="-2">66</text>
+      </svg>
+    </div>
+    <div class="strip-label">Back · Number 66</div>
+  </div>
+  <div class="strip-item">
+    <div class="shirt-visual" style="background: #131313;">
+      <svg width="200" height="240" viewBox="0 0 200 240" style="opacity: 0.6;">
+        <path d="M60 40 L20 70 L40 90 L40 200 L160 200 L160 90 L180 70 L140 40 L120 55 Q100 65 80 55 Z" fill="rgba(240,236,228,0.03)" stroke="rgba(240,236,228,0.2)" stroke-width="1.5"/>
+        <ellipse cx="100" cy="120" rx="55" ry="55" fill="none" stroke="rgba(240,236,228,0.4)" stroke-width="12" transform="rotate(-8 100 120)" stroke-dasharray="8 3"/>
+        <ellipse cx="100" cy="120" rx="26" ry="26" fill="rgba(19,19,19,0.9)" stroke="rgba(240,236,228,0.2)" stroke-width="1"/>
+        <text x="100" y="116" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="10" fill="rgba(240,236,228,0.6)" letter-spacing="1">BABY</text>
+        <text x="100" y="128" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="10" fill="rgba(240,236,228,0.6)" letter-spacing="1">SATURN</text>
+      </svg>
+    </div>
+    <div class="strip-label">Detail · Washed Texture</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">BABY<br>SATURN</div>
+  <div class="footer-meta">
+    ORBIT YOUNG. STAY CURIOUS.<br>
+    SEE IT FIRST. OWN THE MOMENT.<br>
+    ———————<br>
+    BKK, THAILAND · EST. #66<br>
+    PREDPOTYON IS BULLETPROOF.
+  </div>
+</footer>
+
+<script>
+// Custom cursor
+const dot = document.getElementById('dot');
+const ring = document.getElementById('ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+function animCursor() {
+  dot.style.left = mx + 'px';
+  dot.style.top = my + 'px';
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+document.querySelectorAll('a, button, .design-card, .connection-node').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    ring.style.width = '60px';
+    ring.style.height = '60px';
+    ring.style.borderColor = 'rgba(212,197,169,0.6)';
+  });
+  el.addEventListener('mouseleave', () => {
+    ring.style.width = '32px';
+    ring.style.height = '32px';
+    ring.style.borderColor = 'rgba(240,236,228,0.4)';
+  });
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      const delay = e.target.getAttribute('data-delay') || 0;
+      setTimeout(() => e.target.classList.add('visible'), parseInt(delay));
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
+
+// Tilt effect
+document.querySelectorAll('.tilt-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(1000px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+
+// Parallax hero number
+const heroNum = document.querySelector('.hero-number');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (heroNum) heroNum.style.transform = `translate(-50%, calc(-50% + ${y * 0.3}px))`;
+});
+</script>
+</body>
+</html>
